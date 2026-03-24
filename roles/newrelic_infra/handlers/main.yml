@@ -1,0 +1,4 @@
+- name: Restart New Relic Infra Service
+  ansible.windows.win_service:
+    name: newrelic-infra
+    state: restarted
