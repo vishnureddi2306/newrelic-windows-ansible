@@ -1,3 +1,9 @@
+- name: Normalize environment tags
+  set_fact:
+    env_tag: "{{ input_tag_Environment | default('unknown') | lower }}"
+    inst_tag: "{{ nr_institution | default('unknown') | lower }}"
+    NEW_RELIC_LICENSE_KEY: "{{ lookup('env', 'NEW_RELIC_LICENSE_KEY_PROD') if (input_tag_Environment | lower) == 'prd' else lookup('env', 'NEW_RELIC_LICENSE_KEY_NPROD') }}"
+
 - name: Install or Upgrade New Relic Infrastructure Agent
   ansible.windows.win_package:
     path: https://download.newrelic.com/infrastructure_agent/windows/newrelic-infra.msi
@@ -8,10 +14,11 @@
     path: 'C:\Program Files\New Relic\newrelic-infra'
     state: directory
 
-- name: Configure New Relic license key
+- name: Configure New Relic Infrastructure Agent
   ansible.windows.win_template:
     src: newrelic-infra.yml.j2
     dest: 'C:\Program Files\New Relic\newrelic-infra\newrelic-infra.yml'
+  notify: Restart New Relic Infra Service
 
 - name: Ensure New Relic Infrastructure service is running
   ansible.windows.win_service:
