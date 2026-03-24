@@ -20,6 +20,16 @@
     dest: 'C:\Program Files\New Relic\newrelic-infra\newrelic-infra.yml'
   notify: Restart New Relic Infra Service
 
+- name: Ensure integrations.d directory exists
+  ansible.windows.win_file:
+    path: 'C:\Program Files\New Relic\newrelic-infra\integrations.d'
+    state: directory
+
+- name: Deploy win-services-config.yml file
+  ansible.windows.win_template:
+    src: win-services-config.yml.j2
+    dest: 'C:\Program Files\New Relic\newrelic-infra\integrations.d\win-services-config.yml' 
+
 - name: Ensure New Relic Infrastructure service is running
   ansible.windows.win_service:
     name: newrelic-infra
