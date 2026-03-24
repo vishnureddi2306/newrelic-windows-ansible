@@ -1,7 +1,7 @@
 - name: Normalize environment tags
   set_fact:
     env_tag: "{{ input_tag_Environment | default('unknown') | lower }}"
-    inst_tag: "{{ nr_institution | default('unknown') | lower }}"
+    inst_tag: "{{ nr_institution | default('unknown') }}"
     NEW_RELIC_LICENSE_KEY: "{{ lookup('env', 'NEW_RELIC_LICENSE_KEY_PROD') if (input_tag_Environment | lower) == 'prd' else lookup('env', 'NEW_RELIC_LICENSE_KEY_NPROD') }}"
 
 - name: Install or Upgrade New Relic Infrastructure Agent
@@ -12,13 +12,7 @@
 - name: Ensure New Relic config directory exists
   ansible.windows.win_file:
     path: 'C:\Program Files\New Relic\newrelic-infra'
-    state: directory
-
-- name: Debug New Relic Keys
-  debug:
-    msg:
-      - "PROD KEY: {{ lookup('env','NEW_RELIC_LICENSE_KEY_PROD') | default('NOT FOUND') }}"
-      - "NPROD KEY: {{ lookup('env','NEW_RELIC_LICENSE_KEY_NPROD') | default('NOT FOUND') }}"    
+    state: directory    
 
 - name: Configure New Relic Infrastructure Agent
   ansible.windows.win_template:
