@@ -1,0 +1,7 @@
+---
+- name: Install New Relic Infra Agent
+  hosts: windows
+  gather_facts: no
+
+  roles:
+    - newrelic_infra
