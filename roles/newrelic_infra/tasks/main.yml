@@ -2,7 +2,7 @@
   set_fact:
     env_tag: "{{ input_tag_Environment | default('unknown') | lower }}"
     inst_tag: "{{ nr_institution | default('unknown') }}"
-    NEW_RELIC_LICENSE_KEY: "{{ lookup('env', 'NEW_RELIC_LICENSE_KEY_PROD') if (input_tag_Environment | lower) == 'prd' else lookup('env', 'NEW_RELIC_LICENSE_KEY_NPROD') }}"
+    NEW_RELIC_LICENSE_KEY: "{{ lookup('env', 'NEW_RELIC_LICENSE_KEY_PROD') if input_tag_Environment == 'prd' else lookup('env', 'NEW_RELIC_LICENSE_KEY_NPROD') }}"
 
 - name: Install or Upgrade New Relic Infrastructure Agent
   ansible.windows.win_package:
